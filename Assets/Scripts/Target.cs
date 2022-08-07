@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Target : MonoBehaviour {
     private Rigidbody targetRb;
@@ -35,13 +36,13 @@ public class Target : MonoBehaviour {
     }
 
 
-    private void OnMouseDown() {
-        if (gameManager.isGameActive) {
-            Destroy(gameObject);
-            Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
-            gameManager.UpdateScore(pointValue);
-        }
-    }
+    //private void OnMouseDown() {
+    //    if (gameManager.isGameActive) {
+    //        Destroy(gameObject);
+    //        Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
+    //        gameManager.UpdateScore(pointValue);
+    //    }
+    //}
 
     private void OnTriggerEnter(Collider other) {
         Destroy(gameObject);
@@ -51,6 +52,24 @@ public class Target : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
+        var mouse = Mouse.current;
+        if (mouse == null) {
+            Debug.Log("当前Mouse没状态" + mouse);
+            return;
+        }
 
+
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouse.position.ReadValue());
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+        Debug.Log("当前点击的是什么=" + mousePos);
+
+        if (hit) {
+            if (gameManager.isGameActive) {
+                Destroy(gameObject);
+                Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
+                gameManager.UpdateScore(pointValue);
+            }
+        }
     }
 }
