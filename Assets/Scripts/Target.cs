@@ -13,8 +13,11 @@ public class Target : MonoBehaviour {
     public int pointValue;
     public ParticleSystem explosionParticle;
 
+    private Camera cam;
+
     // Start is called before the first frame update
     private void Start() {
+        cam = GameObject.Find("Main Camera").GetComponent<Camera>();
         targetRb = GetComponent<Rigidbody>();
         targetRb.AddForce(RandomForce(), ForceMode.Impulse);
         targetRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);
@@ -35,41 +38,22 @@ public class Target : MonoBehaviour {
         return new Vector3(Random.Range(-xRange, xRange), ySpawnPos);
     }
 
-
-    //private void OnMouseDown() {
-    //    if (gameManager.isGameActive) {
-    //        Destroy(gameObject);
-    //        Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
-    //        gameManager.UpdateScore(pointValue);
-    //    }
-    //}
+    public void OnClick(InputAction.CallbackContext context) {
+        RaycastHit hit;
+        Vector3 coor = Mouse.current.position.ReadValue();
+        if (Physics.Raycast(cam.ScreenPointToRay(coor), out hit)) {
+            if (hit.collider.gameObject == gameObject)
+                if (gameManager.isGameActive) {
+                    Destroy(gameObject);
+                    Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
+                    gameManager.UpdateScore(pointValue);
+                }
+        }
+    }
 
     private void OnTriggerEnter(Collider other) {
         Destroy(gameObject);
         if (!gameObject.CompareTag("Bad"))//如果加分的箱子没被点掉,触发了这个就会游戏结束
             gameManager.GameOver();
-    }
-
-    // Update is called once per frame
-    private void Update() {
-        var mouse = Mouse.current;
-        if (mouse == null) {
-            Debug.Log("当前Mouse没状态" + mouse);
-            return;
-        }
-
-
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouse.position.ReadValue());
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-
-        Debug.Log("当前点击的是什么=" + mousePos);
-
-        if (hit) {
-            if (gameManager.isGameActive) {
-                Destroy(gameObject);
-                Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
-                gameManager.UpdateScore(pointValue);
-            }
-        }
     }
 }
