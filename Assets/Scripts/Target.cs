@@ -40,7 +40,14 @@ public class Target : MonoBehaviour {
 
     public void OnClick(InputAction.CallbackContext context) {
         RaycastHit hit;
+
+
+#if UNITY_STANDALONE || UNITY_EDITOR
         Vector3 coor = Mouse.current.position.ReadValue();
+#elif UNITY_ANDROID || UNITY_IOS
+        Vector3 coor = Touchscreen.current.position.ReadValue();
+#endif
+
         if (Physics.Raycast(cam.ScreenPointToRay(coor), out hit)) {
             if (hit.collider.gameObject == gameObject)
                 if (gameManager.isGameActive) {
@@ -48,6 +55,18 @@ public class Target : MonoBehaviour {
                     Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
                     gameManager.UpdateScore(pointValue);
                 }
+        }
+
+        if (context.phase == InputActionPhase.Started) {
+            Debug.Log("点击Started");
+        } else if (context.phase == InputActionPhase.Waiting) {
+            Debug.Log("点击Waiting");
+        } else if (context.phase == InputActionPhase.Performed) {
+            Debug.Log("点击Performed");
+        } else if (context.phase == InputActionPhase.Canceled) {
+            Debug.Log("点击Canceled");
+        } else if (context.phase == InputActionPhase.Disabled) {
+            Debug.Log("点击Disabled");
         }
     }
 

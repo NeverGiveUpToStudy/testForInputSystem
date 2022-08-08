@@ -6,7 +6,7 @@
             "id": "7c4470a4-6b19-4278-9162-e784c08f72cf",
             "actions": [
                 {
-                    "name": "beClick",
+                    "name": "Click",
                     "type": "Button",
                     "id": "2098340a-a1b9-4c79-ac18-0b68e8012f9c",
                     "expectedControlType": "Button",
@@ -23,7 +23,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "beClick",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "96dbfbf8-d7fb-45b1-9f6b-26d8da7fe886",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
