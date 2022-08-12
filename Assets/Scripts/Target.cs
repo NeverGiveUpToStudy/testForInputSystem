@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,15 +32,15 @@ public class Target : MonoBehaviour {
     }
 
     private Vector3 RandomForce() {
-        return Vector3.up * Random.Range(minSpeed, maxSpeed);
+        return Vector3.up * UnityEngine.Random.Range(minSpeed, maxSpeed);
     }
 
     private float RandomTorque() {
-        return Random.Range(-maxTorque, maxTorque);
+        return UnityEngine.Random.Range(-maxTorque, maxTorque);
     }
 
     private Vector3 RandomSpawnPos() {
-        return new Vector3(Random.Range(-xRange, xRange), ySpawnPos);
+        return new Vector3(UnityEngine.Random.Range(-xRange, xRange), ySpawnPos);
     }
 
     public void OnClick(InputAction.CallbackContext context) {
@@ -89,5 +90,9 @@ public class Target : MonoBehaviour {
         Destroy(gameObject);
         if (!gameObject.CompareTag("Bad"))//如果加分的箱子没被点掉,触发了这个就会游戏结束
             gameManager.GameOver();
+    }
+
+    private void OnBecameInvisible() {
+        Debug.Log(gameObject.name + "即将被销毁" + DateTime.Now);
     }
 }
